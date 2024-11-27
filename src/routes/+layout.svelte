@@ -31,10 +31,10 @@
 
 <ModeWatcher />
 
-<div class="flex min-h-screen flex-col bg-[#274060]">
+<div class="flex min-h-screen flex-col  bg-[#274060]">
 	<nav class=" shadow-md p-2">
 		<div class="mx-auto flex w-full max-w-2xl items-center justify-between">
-			<a href="/" class="text-2xl font-bold text-white">AskO8</a>
+			<a href="/app" class="text-2xl font-bold text-white">AskO8</a>
 			<div class="flex gap-2">
 				<!-- <ThemeToggle /> -->
 				{#if session !== null}
@@ -44,7 +44,7 @@
 		</div>
 	</nav>
 
-	<main class="mx-auto w-full flex-grow px-2 md:px-0">
+	<main class="m-auto w-full flex-grow px-2 md:px-0">
 		{@render children()}
 	</main>
 

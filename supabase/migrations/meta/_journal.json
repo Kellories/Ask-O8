@@ -8,6 +8,13 @@
       "when": 1716850758364,
       "tag": "0000_faulty_random",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1731401549391,
+      "tag": "0001_shiny_earthquake",
+      "breakpoints": true
     }
   ]
 }
