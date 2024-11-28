@@ -5,12 +5,34 @@
 	let messages = [];
 	let messageContainer;
 	let selectedKnowledgeBase = '';
+	let knowledgeBases = [];
 
-	const knowledgeBases = ['General Knowledge', 'Science', 'Technology', 'History', 'Mathematics'];
+	const fetchKnowledgeBases = async () => {
+		try {
+			const response = await fetch('/api/fetchAllKnowledgeBase', {
+				method: 'GET',
+			});
+
+			if (response.ok) {
+				const data = await response.json();
+				knowledgeBases = data  
+			} else {
+				console.error('Error fetching knowledge bases.');
+				knowledgeBases = [];
+			}
+
+			
+		} catch (error) {
+			console.error('Fetch error:', error);
+			knowledgeBases = [];
+		}
+	};
+
+	onMount(async()=>{await fetchKnowledgeBases()});
 
 	const sendMessage = async (message) => {
 		messages = [...messages, { text: message, sender: 'user' }];
-    console.log(message)
+		console.log(message);
 		try {
 			const response = await fetch('/api/createEmbedding', {
 				method: 'POST',
@@ -18,14 +40,22 @@
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify({
-					input : message,
+					input: message,
 					knowledgeBase: selectedKnowledgeBase
 				})
 			});
 
 			if (response.ok) {
 				const data = await response.json();
-        console.log(data)
+				
+				// write logic to find most similar content embedding in knowledgebase
+
+				
+
+				// write logic to append the content fetched into a chat completion
+
+
+
 				messages = [...messages, { text: data.reply, sender: 'bot' }];
 			} else {
 				messages = [
@@ -63,7 +93,7 @@
 			>
 				<option value="" disabled selected>Select...</option>
 				{#each knowledgeBases as knowledgeBase}
-					<option value={knowledgeBase}>{knowledgeBase}</option>
+					<option value={knowledgeBase.id}>{knowledgeBase.display}</option>
 				{/each}
 			</select>
 		</div>

@@ -3,58 +3,66 @@
     import { goto } from '$app/navigation';
 
     let slug: string = '';
-    $: slug = $page.params.slug;
+    $: slug = $page.params.slug; // Get the slug dynamically from the route params
 
-    let content: string = '';
-    let pdfFile: File | null = null;
+    let content: string = ''; // For text input
+    let pdfFile: File | null = null; // For PDF file upload
     let mode: 'text' | 'pdf' = 'text'; // Track whether the user is using text or PDF
-    let loading = false;
-    let errorMessage = '';
+    let loading = false; // Loading state
+    let errorMessage = ''; // Error message state
 
-    // Handle file upload
-    const handleFileUpload = (event: Event) => {
-        const target = event.target as HTMLInputElement;
-        if (target.files && target.files.length > 0) {
-            pdfFile = target.files[0];
-        }
-    };
+    let fileContent : string
+    let fileType : string
 
-    // Submit content or PDF
+
     const createContent = async () => {
-        loading = true;
-        try {
-            const formData = new FormData();
-            formData.append('knowledgebaseid', slug);
+    try {
+        const payload = {
+            input: content || null, // Plain text input
+            fileString: fileContent || null, // File content as a Base64 string
+            fileType: fileType || "text", // Specify the file type
+            knowledgebaseid: $page.params.slug
+        };
 
-            if (mode === 'text') {
-                if (!content.trim()) {
-                    throw new Error('Content cannot be empty');
-                }
-                formData.append('content', content);
-            } else if (mode === 'pdf' && pdfFile) {
-                formData.append('file', pdfFile);
-            } else {
-                throw new Error('Please upload a valid PDF file');
-            }
+        const res = await fetch("/api/createEmbedding", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        });
 
-            const res = await fetch(`/api/uploadDocument`, {
-                method: 'POST',
-                body: formData,
-            });
-
-            if (!res.ok) {
-                const errorData = await res.json();
-                throw new Error(errorData.message || 'Failed to create content');
-            }
-
-            // Redirect back to the knowledge base page
-            goto(`/app/knowledge/${slug}`);
-        } catch (error) {
-            errorMessage = error.message || 'An unexpected error occurred';
-        } finally {
-            loading = false;
+        if (!res.ok) {
+            const error = await res.json();
+            throw new Error(error.message || "Failed to create embedding.");
         }
-    };
+
+        const { embedding, text } = await res.json();
+        console.log("Embedding created successfully:", embedding);
+        console.log("Extracted text:", text);
+        goto(`/app/knowledge/${$page.params.slug}`)
+    } catch (err) {
+        console.error("Error creating embedding:", err.message);
+    }
+};
+
+// Example to convert file to Base64
+const convertFileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result.split(",")[1]); // Remove metadata
+        reader.onerror = (err) => reject(err);
+        reader.readAsDataURL(file);
+    });
+};
+
+// Usage in a file upload handler
+const handleFileUpload = async (file) => {
+    const base64String = await convertFileToBase64(file);
+    fileContent = base64String; // Send this to the backend
+    fileType = "pdf"; // Or other file type
+};
+
 </script>
 
 <main class="p-6 bg-gray-50 min-h-screen flex flex-col items-center">

@@ -1,44 +1,50 @@
-import { db } from '$lib/db'; // Import your database connection
-import { documents } from '$lib/db/schema'; // Adjust the path as necessary
+import { sql } from '$lib/db'; // Import your database connection
 import { v4 as uuidv4 } from 'uuid';
-import { sql } from 'drizzle-orm';
-
-export const createEmbeddings = async (knowledgebaseid: string, embeddings: number[], content: string) => {
-  if (embeddings.length !== 1536) {
+export const createEmbedding = async (
+  knowledgebaseid: string,
+  embedding: number[],
+  content: string
+) => {
+  if (embedding.length !== 1536) {
     throw new Error("Embedding must be 1536 dimensions.");
   }
 
   try {
-    await db.insert(documents).values({
-      id: uuidv4(),
-      knowledgebaseid: knowledgebaseid,
-      content: content,
-      embedding: embeddings,
-    });
-
-    console.log("Embedding inserted successfully.");
+    const result = await sql`
+      INSERT INTO documents (knowledgebaseid, embedding, content)
+      VALUES (
+        ${knowledgebaseid}, 
+        ${JSON.stringify(embedding)}, -- Format embedding as a JSON array
+        ${content}
+      )
+      RETURNING *;
+    `;
+    console.log("Embedding created successfully:", result);
+    return result[0];
   } catch (error) {
-    console.error("Error inserting embedding:", error);
+    console.error("Error creating embedding:", error);
+    throw error;
   }
 };
 
+
 export const findSimilarEmbeddings = async (embedding: number[], limit: number = 5) => {
-    if (embedding.length !== 1536) {
-      throw new Error("Embedding must be 1536 dimensions.");
-    }
-  
-    try {
-      const results = await db
-        .select()
-        .from(documents)
-        .where(sql`embedding <=> ${embedding} < 0.5`) // Using cosine similarity threshold of 0.5
-        .orderBy(sql`embedding <=> ${embedding}`) // Order by similarity (ascending)
-        .limit(limit); // Limit the number of results
-  
-      console.log("Similar embeddings found:", results);
-      return results;
-    } catch (error) {
-      console.error("Error performing similarity search:", error);
-      throw error;
-    }
-  };
+  if (embedding.length !== 1536) {
+    throw new Error("Embedding must be 1536 dimensions.");
+  }
+
+  try {
+    const result = await sql`
+      SELECT *, embedding <=> ${JSON.stringify(embedding)} AS similarity
+      FROM documents
+      WHERE embedding <=> ${JSON.stringify(embedding)} < 0.5
+      ORDER BY similarity ASC
+      LIMIT ${limit};
+    `;
+    console.log("Similar embeddings found:", result);
+    return result;
+  } catch (error) {
+    console.error("Error finding similar embeddings:", error);
+    throw error;
+  }
+};
