@@ -24,7 +24,7 @@
             knowledgebaseid: $page.params.slug
         };
 
-        const res = await fetch("/api/createEmbedding", {
+        const res = await fetch("/api/storeEmbedding", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

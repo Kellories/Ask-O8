@@ -1,7 +1,6 @@
 <script>
 	import { onMount, afterUpdate } from 'svelte';
 	import MessageInput from './MessageInput.svelte';
-
 	let messages = [];
 	let messageContainer;
 	let selectedKnowledgeBase = '';
@@ -32,7 +31,6 @@
 
 	const sendMessage = async (message) => {
 		messages = [...messages, { text: message, sender: 'user' }];
-		console.log(message);
 		try {
 			const response = await fetch('/api/createEmbedding', {
 				method: 'POST',
@@ -47,16 +45,27 @@
 
 			if (response.ok) {
 				const data = await response.json();
-				
+				console.log(data)
 				// write logic to find most similar content embedding in knowledgebase
+				const response1 = await fetch ('/api/findSimilarEmbedding',{
+					method:'POST',
+					headers:{
+						'Content-Type':'application/json'
+					},
+					body: JSON.stringify({
+						knowledgebaseid : selectedKnowledgeBase,
+						embedding : data.embedding,
 
-				
+					})
+				})
+
+				let data1 = await response1.json()
 
 				// write logic to append the content fetched into a chat completion
 
 
 
-				messages = [...messages, { text: data.reply, sender: 'bot' }];
+				messages = [...messages, { text: data1.content, sender: 'bot' }];
 			} else {
 				messages = [
 					...messages,

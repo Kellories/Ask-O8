@@ -14,39 +14,17 @@ export const POST = async ({ request }) => {
     const openai = new OpenAI({ apiKey });
 
     try {
-        const { input, fileString, fileType,knowledgebaseid } = await request.json();
+        const { input } = await request.json();
 
-        let textToEmbed = "";
-        console.log(input, fileString, fileType)
-        if (fileString) {
-            if (fileType === "pdf") {
-                // Optional: Extract text from PDF fileString if it's Base64-encoded
-                const pdfBuffer = Buffer.from(fileString, "base64");
-                textToEmbed = await parsePDF(pdfBuffer);
-            } else {
-                // Treat fileString as plain text
-                textToEmbed = fileString;
-            }
-        } else if (input) {
-            textToEmbed = input.trim();
-        } else {
-            throw new Error("No input or file string provided.");
-        }
 
-        if (!textToEmbed || textToEmbed.length === 0) {
-            throw new Error("No valid content found in the input or file string.");
-        }
-
-        console.log(textToEmbed)
         // Generate embeddings using OpenAI
         const embeddingResponse = await openai.embeddings.create({
             model: "text-embedding-ada-002",
-            input: textToEmbed,
+            input: input,
         });
         console.log(embeddingResponse)
         const [{ embedding }] = embeddingResponse.data;
-        let res = await createEmbedding(knowledgebaseid,embedding,input)
-        return new Response(JSON.stringify({ embedding, text: textToEmbed }), {
+        return new Response(JSON.stringify({ embedding, text: input }), {
             status: 200,
         });
     } catch (err) {

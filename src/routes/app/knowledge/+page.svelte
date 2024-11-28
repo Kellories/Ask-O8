@@ -56,9 +56,9 @@
                 <TableHeadCell class="px-6 py-3 text-left font-medium text-gray-700">Display Name</TableHeadCell>
                 <TableHeadCell class="px-6 py-3 text-left font-medium text-gray-700">Actions</TableHeadCell>
             </TableHead>
-            <TableBody>
+            <TableBody class = 'text-gray-900'>
                 {#each knowledgeBases as kb}
-                    <TableBodyRow>
+                    <TableBodyRow class = 'text-gray-900'>
                         <TableBodyCell class="px-6 py-4 text-sm text-gray-900">{kb.id}</TableBodyCell>
                         <TableBodyCell class="px-6 py-4 text-sm text-gray-900">{kb.display}</TableBodyCell>
                         <TableBodyCell class="px-6 py-4 text-sm text-gray-900">

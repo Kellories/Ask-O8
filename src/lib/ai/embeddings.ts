@@ -28,7 +28,7 @@ export const createEmbedding = async (
 };
 
 
-export const findSimilarEmbeddings = async (embedding: number[], limit: number = 5) => {
+export const findSimilarEmbeddings = async (knowledgebaseid : string, embedding: number[], limit: number = 5) => {
   if (embedding.length !== 1536) {
     throw new Error("Embedding must be 1536 dimensions.");
   }
@@ -38,6 +38,7 @@ export const findSimilarEmbeddings = async (embedding: number[], limit: number =
       SELECT *, embedding <=> ${JSON.stringify(embedding)} AS similarity
       FROM documents
       WHERE embedding <=> ${JSON.stringify(embedding)} < 0.5
+      AND knowledgebaseid = ${knowledgebaseid}
       ORDER BY similarity ASC
       LIMIT ${limit};
     `;
