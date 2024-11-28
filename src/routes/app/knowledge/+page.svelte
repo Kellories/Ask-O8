@@ -50,16 +50,16 @@
     {#if knowledgeBases.length === 0}
         <p class="text-gray-700 text-center">No knowledge base entries created yet!</p>
     {:else}
-        <Table striped={true} hoverable={true} class="bg-white border border-gray-200 rounded-md shadow-md">
+        <Table striped={true} hoverable={true} class=" border border-gray-200 rounded-md shadow-md">
             <TableHead>
                 <TableHeadCell class="px-6 py-3 text-left font-medium text-gray-700">ID</TableHeadCell>
                 <TableHeadCell class="px-6 py-3 text-left font-medium text-gray-700">Display Name</TableHeadCell>
                 <TableHeadCell class="px-6 py-3 text-left font-medium text-gray-700">Actions</TableHeadCell>
             </TableHead>
-            <TableBody class = 'text-gray-900'>
+            <TableBody class = ''>
                 {#each knowledgeBases as kb}
-                    <TableBodyRow class = 'text-gray-900'>
-                        <TableBodyCell class="px-6 py-4 text-sm text-gray-900">{kb.id}</TableBodyCell>
+                    <TableBodyRow class = ''>
+                        <TableBodyCell class="px-6 py-4 text-sm ">{kb.id}</TableBodyCell>
                         <TableBodyCell class="px-6 py-4 text-sm text-gray-900">{kb.display}</TableBodyCell>
                         <TableBodyCell class="px-6 py-4 text-sm text-gray-900">
                             <button
