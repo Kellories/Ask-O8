@@ -5,7 +5,7 @@
 	let messageContainer;
 	let selectedKnowledgeBase = '';
 	let knowledgeBases = [];
-
+	
 	const fetchKnowledgeBases = async () => {
 		try {
 			const response = await fetch('/api/fetchAllKnowledgeBase', {
@@ -45,7 +45,6 @@
 
 			if (response.ok) {
 				const data = await response.json();
-				console.log(data)
 				// write logic to find most similar content embedding in knowledgebase
 				const response1 = await fetch ('/api/findSimilarEmbedding',{
 					method:'POST',
@@ -63,9 +62,20 @@
 
 				// write logic to append the content fetched into a chat completion
 
+				let res2 = await fetch('/api/completeChat',{
+					method:'POST',
+					headers:{
+						'Content-Type':'application/json'
+					},
+					body: JSON.stringify({
+						message : message,
+						content : data1.content,
 
-
-				messages = [...messages, { text: data1.content, sender: 'bot' }];
+					})
+				})
+				let { completion }= await res2.json()
+		
+				messages = [...messages, { text: completion, sender: 'bot' }];
 			} else {
 				messages = [
 					...messages,

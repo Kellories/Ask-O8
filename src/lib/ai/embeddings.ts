@@ -42,7 +42,6 @@ export const findSimilarEmbeddings = async (knowledgebaseid : string, embedding:
       ORDER BY similarity ASC
       LIMIT ${limit};
     `;
-    console.log("Similar embeddings found:", result);
     return result;
   } catch (error) {
     console.error("Error finding similar embeddings:", error);
