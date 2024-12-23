@@ -1,3 +1,4 @@
+import { goto } from "$app/navigation";
 import { getOrCreateUserProfile } from "$lib/auth";
 import { db } from "$lib/db/index.js";
 import { profileTable } from "$lib/db/schema.js";
@@ -7,7 +8,6 @@ import { zfd } from "zod-form-data";
 
 export const load = async ({ locals }) => {
   const userProfile = await getOrCreateUserProfile(locals);
-
   return {
     userProfile,
   };

@@ -14,7 +14,7 @@ function _page($$payload, $$props) {
   $$payload.out += `<!--]--> <div class="mb-4"><label class="block text-sm font-medium text-gray-700">Choose Creation Method</label> <div class="mt-2 flex space-x-4"><button${attr("class", `px-4 py-2 rounded-lg transition duration-200 ${"text-blue-600 bg-blue-100"}`)}>Text</button> <button${attr("class", `px-4 py-2 rounded-lg transition duration-200 ${"text-gray-600 bg-gray-100"}`)}>Upload PDF</button></div></div> `;
   {
     $$payload.out += "<!--[-->";
-    $$payload.out += `<textarea placeholder="Enter your content here..." rows="6" class="w-full mt-4 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">`;
+    $$payload.out += `<textarea placeholder="Enter your content here..." rows="6" class="w-full mt-4 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-100">`;
     const $$body = escape_html(content);
     if ($$body) {
       $$payload.out += `${$$body}`;

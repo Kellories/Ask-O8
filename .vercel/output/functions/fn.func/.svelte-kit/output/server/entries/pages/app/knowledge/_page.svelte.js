@@ -316,7 +316,7 @@ function TableHeadCell($$payload, $$props) {
 function _page($$payload, $$props) {
   push();
   let knowledgeBases = [];
-  $$payload.out += `<main class="p-4 bg-gray-50 min-h-screen"><div class="flex justify-between items-center mb-4"><h1 class="text-2xl font-bold text-gray-800">Knowledge Bases</h1> <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200">Create Knowledge Base</button></div> `;
+  $$payload.out += `<main class="p-4 text-gray-900 bg-gray-50 min-h-screen"><div class="flex justify-between items-center mb-4"><h1 class="text-2xl font-bold text-gray-800">Knowledge Bases</h1> <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200">Create Knowledge Base</button></div> `;
   if (knowledgeBases.length === 0) {
     $$payload.out += "<!--[-->";
     $$payload.out += `<p class="text-gray-700 text-center">No knowledge base entries created yet!</p>`;
@@ -325,7 +325,7 @@ function _page($$payload, $$props) {
     Table($$payload, {
       striped: true,
       hoverable: true,
-      class: "bg-white border border-gray-200 rounded-md shadow-md",
+      class: " border border-gray-200 rounded-md shadow-md",
       children: ($$payload2) => {
         TableHead($$payload2, {
           children: ($$payload3) => {
@@ -358,17 +358,17 @@ function _page($$payload, $$props) {
         });
         $$payload2.out += `<!----> `;
         TableBody($$payload2, {
-          class: "text-gray-900",
+          class: "",
           children: ($$payload3) => {
             const each_array = ensure_array_like(knowledgeBases);
             $$payload3.out += `<!--[-->`;
             for (let $$index = 0, $$length = each_array.length; $$index < $$length; $$index++) {
               let kb = each_array[$$index];
               TableBodyRow($$payload3, {
-                class: "text-gray-900",
+                class: "",
                 children: ($$payload4) => {
                   TableBodyCell($$payload4, {
-                    class: "px-6 py-4 text-sm text-gray-900",
+                    class: "px-6 py-4 text-sm dark:text-gray-900 ",
                     children: ($$payload5) => {
                       $$payload5.out += `<!---->${escape_html(kb.id)}`;
                     },
@@ -376,7 +376,7 @@ function _page($$payload, $$props) {
                   });
                   $$payload4.out += `<!----> `;
                   TableBodyCell($$payload4, {
-                    class: "px-6 py-4 text-sm text-gray-900",
+                    class: "px-6 py-4 text-sm dark:text-gray-900",
                     children: ($$payload5) => {
                       $$payload5.out += `<!---->${escape_html(kb.display)}`;
                     },

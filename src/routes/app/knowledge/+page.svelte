@@ -36,7 +36,7 @@
     });
 </script>
 
-<main class="p-4 bg-gray-50 min-h-screen">
+<main class="p-4 text-gray-900 bg-gray-50 min-h-screen">
     <div class="flex justify-between items-center mb-4">
         <h1 class="text-2xl font-bold text-gray-800">Knowledge Bases</h1>
         <button
@@ -59,8 +59,8 @@
             <TableBody class = ''>
                 {#each knowledgeBases as kb}
                     <TableBodyRow class = ''>
-                        <TableBodyCell class="px-6 py-4 text-sm ">{kb.id}</TableBodyCell>
-                        <TableBodyCell class="px-6 py-4 text-sm text-gray-900">{kb.display}</TableBodyCell>
+                        <TableBodyCell class="px-6 py-4 text-sm dark:text-gray-900 ">{kb.id}</TableBodyCell>
+                        <TableBodyCell class="px-6 py-4 text-sm dark:text-gray-900">{kb.display}</TableBodyCell>
                         <TableBodyCell class="px-6 py-4 text-sm text-gray-900">
                             <button
                                 class="px-3 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-200"

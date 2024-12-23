@@ -30,64 +30,67 @@
 	onMount(async()=>{await fetchKnowledgeBases()});
 
 	const sendMessage = async (message) => {
-		messages = [...messages, { text: message, sender: 'user' }];
-		try {
-			const response = await fetch('/api/createEmbedding', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					input: message,
-					knowledgeBase: selectedKnowledgeBase
-				})
-			});
 
-			if (response.ok) {
-				const data = await response.json();
-				// write logic to find most similar content embedding in knowledgebase
-				const response1 = await fetch ('/api/findSimilarEmbedding',{
-					method:'POST',
-					headers:{
-						'Content-Type':'application/json'
+		if(selectedKnowledgeBase!==''){
+			messages = [...messages, { text: message, sender: 'user' }];
+			try {
+				const response = await fetch('/api/createEmbedding', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
 					},
 					body: JSON.stringify({
-						knowledgebaseid : selectedKnowledgeBase,
-						embedding : data.embedding,
-
+						input: message,
+						knowledgeBase: selectedKnowledgeBase
 					})
-				})
-
-				let data1 = await response1.json()
-
-				// write logic to append the content fetched into a chat completion
-
-				let res2 = await fetch('/api/completeChat',{
-					method:'POST',
-					headers:{
-						'Content-Type':'application/json'
-					},
-					body: JSON.stringify({
-						message : message,
-						content : data1.content,
-
+				});
+	
+				if (response.ok) {
+					const data = await response.json();
+					// write logic to find most similar content embedding in knowledgebase
+					const response1 = await fetch ('/api/findSimilarEmbedding',{
+						method:'POST',
+						headers:{
+							'Content-Type':'application/json'
+						},
+						body: JSON.stringify({
+							knowledgebaseid : selectedKnowledgeBase,
+							embedding : data.embedding,
+	
+						})
 					})
-				})
-				let { completion }= await res2.json()
-		
-				messages = [...messages, { text: completion, sender: 'bot' }];
-			} else {
+	
+					let data1 = await response1.json()
+	
+					// write logic to append the content fetched into a chat completion
+	
+					let res2 = await fetch('/api/completeChat',{
+						method:'POST',
+						headers:{
+							'Content-Type':'application/json'
+						},
+						body: JSON.stringify({
+							message : message,
+							content : data1.content,
+	
+						})
+					})
+					let { completion }= await res2.json()
+			
+					messages = [...messages, { text: completion, sender: 'bot' }];
+				} else {
+					messages = [
+						...messages,
+						{ text: 'Error fetching response from the server.', sender: 'bot' }
+					];
+				}
+			} catch (error) {
+				console.error('Fetch error:', error);
 				messages = [
 					...messages,
-					{ text: 'Error fetching response from the server.', sender: 'bot' }
+					{ text: 'There was an error contacting the server.', sender: 'bot' }
 				];
 			}
-		} catch (error) {
-			console.error('Fetch error:', error);
-			messages = [
-				...messages,
-				{ text: 'There was an error contacting the server.', sender: 'bot' }
-			];
 		}
 	};
 
@@ -109,6 +112,7 @@
 				id="knowledgeBase"
 				bind:value={selectedKnowledgeBase}
 				class="rounded-md bg-[#1b2845] px-3 py-2 font-medium text-white"
+				required
 			>
 				<option value="" disabled selected>Select...</option>
 				{#each knowledgeBases as knowledgeBase}

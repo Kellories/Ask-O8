@@ -96,3 +96,47 @@ export const deleteKnowledgeBase = async (id: string) => {
     throw error;
   }
 };
+
+
+//delete documents
+
+export const deleteContent = async (id : string) => {
+  try {
+    const result = await sql `
+      DELETE FROM documents
+      WHERE id = ${id}
+      RETURNING *
+    `
+
+    console.log("Content deleted successfully:", result)
+    return result
+  } catch (error) {
+    console.error("Error deleting knowledge base", error)
+    throw error;
+  }
+}
+
+export const fetchContent = async (id : string) => {
+  try {
+    const result = await sql `
+    SELECT * FROM documents
+    WHERE id = ${id}
+  `
+    console.log('Content fetched successfully', result)
+    return result
+  } catch (error) {
+    console.error("Error fetching content", error)
+    throw error
+  }
+}
+
+export const updateContent = async (id : string, newContent : string) => {
+ try {
+  const result = await sql`
+  INSERT INTO documents VALUES 
+  WHERE id = ${id}
+  `
+ } catch (error) {
+  
+ } 
+}

@@ -102,7 +102,7 @@ const handleFileUpload = async (file) => {
                 bind:value={content}
                 placeholder="Enter your content here..."
                 rows="6"
-                class="w-full mt-4 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                class="w-full mt-4 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-100"
             ></textarea>
         {/if}
 

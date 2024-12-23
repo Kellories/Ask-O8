@@ -334,7 +334,7 @@ function ChatWindow($$payload, $$props) {
   let knowledgeBases = [];
   const each_array = ensure_array_like(knowledgeBases);
   const each_array_1 = ensure_array_like(messages);
-  $$payload.out += `<div class="flex h-full w-full flex-col items-center justify-center pt-8"><div class="flex h-[80vh] w-full max-w-3xl flex-col rounded-lg bg-white p-4 shadow-lg"><div class="mb-4 self-start"><label for="knowledgeBase" class="sr-only">Select Knowledge Base:</label> <select id="knowledgeBase" class="rounded-md bg-[#1b2845] px-3 py-2 font-medium text-white"><option value="" disabled selected>Select...</option><!--[-->`;
+  $$payload.out += `<div class="flex h-full w-full flex-col items-center justify-center pt-8"><div class="flex h-[80vh] w-full max-w-3xl flex-col rounded-lg bg-white p-4 shadow-lg"><div class="mb-4 self-start"><label for="knowledgeBase" class="sr-only">Select Knowledge Base:</label> <select id="knowledgeBase" class="rounded-md bg-[#1b2845] px-3 py-2 font-medium text-white" required><option value="" disabled selected>Select...</option><!--[-->`;
   for (let $$index = 0, $$length = each_array.length; $$index < $$length; $$index++) {
     let knowledgeBase = each_array[$$index];
     $$payload.out += `<option${attr("value", knowledgeBase.id)}>${escape_html(knowledgeBase.display)}</option>`;

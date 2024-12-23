@@ -1,3 +1,4 @@
+import { g as goto } from "../../chunks/client.js";
 import { g as getOrCreateUserProfile } from "../../chunks/index6.js";
 import { d as db, p as profileTable } from "../../chunks/index4.js";
 import { e as error } from "../../chunks/index2.js";
@@ -5,6 +6,9 @@ import { eq } from "drizzle-orm";
 import { zfd } from "zod-form-data";
 const load = async ({ locals }) => {
   const userProfile = await getOrCreateUserProfile(locals);
+  if (!userProfile) {
+    goto();
+  }
   return {
     userProfile
   };
